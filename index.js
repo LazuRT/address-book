@@ -29,6 +29,28 @@ for (let i = 0; i < contacts.length; i++) {
   console.log(contacts[i]);
 }
 
+// add contact function
+const addContact = function (fullName, phone, email, location) {
+  const id = contacts.length + 1;
+  // contacts = [...contacts, { id, fullName, phone, email, location }];
+  contacts.push({ id, fullName, phone, email, location });
+  console.log(contacts);
+};
+
+addContact(
+  "John Doe",
+  "0987898667",
+  "email@email.com",
+  "Los Angeles, California",
+);
+addContact("Ellen Baker", "01234566", "ellen@email.com", "Chicago, Illinois");
+
+for (let i = 0; i < contacts.length; i++) {
+  console.log(
+    `${contacts[i].fullName}, ${contacts[i].phone}, ${contacts[i].email}`,
+  );
+}
+const found = contacts.find((contact) => contact.fullName === "Rizky Pratama");
 // contacts.forEach((contact) => {
 //   console.log(contact);
 // });
