@@ -1,5 +1,3 @@
-console.log("Test address book");
-
 const contacts = [
   {
     id: 1,
@@ -27,6 +25,14 @@ const contacts = [
   },
 ];
 
+const printContacts = function (contacts) {
+  for (let i = 0; i < contacts.length; i++) {
+    console.log(
+      `${contacts[i].fullName}, ${contacts[i].phone}, ${contacts[i].email}, ${contacts[i].location}`,
+    );
+  }
+};
+
 // add contact function
 const addContact = function (contacts, { fullName, phone, email, location }) {
   console.log(fullName, phone.toString(), email, location);
@@ -48,7 +54,7 @@ const updateContact = function (contacts, id, updatedInfo) {
   // Search contact index
   const i = contacts.findIndex((e) => e.id === id);
   const dateLastEdited = new Date().toISOString();
-  // if contact exist, update contact with edited info
+  // if contact exist, update contact with updated info
   if (i !== -1) {
     contacts[i] = { ...contacts[i], dateLastEdited, ...updatedInfo };
   } else {
@@ -58,31 +64,61 @@ const updateContact = function (contacts, id, updatedInfo) {
   console.log(contacts);
 };
 
-addContact(contacts, {
-  fullName: "John Doe",
-  phone: 987898667,
-  email: "email@email.com",
-  location: "Los Angeles, California",
-});
-addContact(contacts, {
-  fullName: "Ellen Baker",
-  phone: 090987658,
-  email: "ellen@email.com",
-  location: "Chicago, Illinois",
-});
+const deleteContactById = function (contacts, id) {
+  // Search contact index
+  const i = contacts.findIndex((e) => e.id === id);
 
-updateContact(contacts, 3, {
-  phone: 123325681,
-  email: "newemail@gmail.com",
-  location: "Jakarta, Indonesia",
-});
+  // remove the contact
+  if (i !== -1) {
+    contacts.splice(i, 1);
+    console.log(contacts);
+  } else {
+    console.log("Contact not found");
+  }
+};
 
-for (let i = 0; i < contacts.length; i++) {
-  console.log(
-    `${contacts[i].fullName}, ${contacts[i].phone}, ${contacts[i].email}, ${contacts[i].location}`,
+const searchContactByName = function (contacts, name) {
+  const found = contacts.filter((contact) =>
+    contact.fullName.toLowerCase().includes(name.toLowerCase()),
   );
-}
-const found = contacts.find((contact) => contact.fullName === "Rizky Pratama");
-// contacts.forEach((contact) => {
-//   console.log(contact);
+  const searchResult = found.length > 0 ? found : "Contact not found";
+  console.log(`Search contact by name ${name}:`, searchResult);
+
+  return searchResult;
+};
+
+const searchContactById = function (contacts, id) {
+  const found = contacts.find((contact) => contact.id === id);
+  const searchResult = found ? found : "Contact not found";
+  console.log(`Search contact by id ${id}:`, searchResult);
+  return searchResult;
+};
+
+// printContacts(contacts);
+
+// addContact(contacts, {
+//   fullName: "John Doe",
+//   phone: 987898667,
+//   email: "email@email.com",
+//   location: "Los Angeles, California",
 // });
+
+// addContact(contacts, {
+//   fullName: "Ellen Baker",
+//   phone: 90987658,
+//   email: "ellen@email.com",
+//   location: "Chicago, Illinois",
+// });
+
+// updateContact(contacts, 3, {
+//   phone: 123325681,
+//   email: "newemail@gmail.com",
+//   location: "Jakarta, Indonesia",
+// });
+
+// deleteContactById(contacts, 1);
+
+// searchContactByName(contacts, "Adit");
+// searchContactByName(contacts, "Brock"); // not found
+
+// searchContactById(contacts, 2);
