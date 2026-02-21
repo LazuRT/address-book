@@ -114,14 +114,33 @@ const deleteContactById = function (contacts, id) {
   }
 };
 
-const searchContactByName = function (contacts, name) {
+const searchContactByName = function () {
   const found = contacts.filter((contact) =>
-    contact.fullName.toLowerCase().includes(name.toLowerCase()),
+    contact.fullName.toLowerCase().includes(searchInput.value.toLowerCase()),
   );
   const searchResult = found.length > 0 ? found : "Contact not found";
-  console.log(`Search contact by name ${name}:`, searchResult);
+  // console.log(`Search contact by name ${name}:`, searchResult);
 
-  return searchResult;
+  if (found.length > 0) {
+    console.log("found");
+    list.innerHTML = found
+      .map(
+        (contact) => `
+              <div id="contact">
+          <h2>${contact.fullName}</h2>
+          <p>${contact.phone}</p>
+          <p>${contact.email}</p>
+          <p>${contact.location}</p>
+          <button>Edit</button>
+          <button >Delete</button>
+          </div>
+      `,
+      )
+      .join("");
+  } else if (found.length === 0) {
+    console.log("not found");
+    list.innerHTML = `<h3>Contact not found</h3>`;
+  }
 };
 
 const searchContactById = function (contacts, id) {
@@ -141,7 +160,7 @@ const renderContacts = function () {
         <p>${contact.email}</p>
         <p>${contact.location}</p>
         <button>Edit</button>
-        <button>Delete</button>
+        <button >Delete</button>
         </div>
     `,
     )
@@ -184,3 +203,5 @@ const updateLocalStorage = function () {
 // Event listener
 window.addEventListener("load", renderContacts);
 inputForm.addEventListener("submit", addContactForm);
+searchForm.addEventListener("submit", (e) => e.preventDefault());
+searchInput.addEventListener("input", searchContactByName);
