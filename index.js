@@ -45,6 +45,28 @@ const printContacts = function (contacts) {
   }
 };
 
+// Add contact from form
+const addContactForm = function (e) {
+  e.preventDefault();
+
+  const contact = {
+    id: contacts.length + 1,
+    fullName: fullNameInput.value,
+    phone: phoneNumberInput.value,
+    email: emailInput.value,
+    location: locationInput.value,
+    dateCreated: new Date().toISOString(),
+  };
+  contacts.push(contact);
+  // fullNameInput.value = "";
+  // phoneNumberInput.value = "";
+  // emailInput.value = "";
+  // locationInput.value = "";
+  console.log(contacts);
+  inputForm.reset();
+  updateLocalStorage();
+};
+
 // add contact function
 const addContact = function (contacts, { fullName, phone, email, location }) {
   console.log(fullName, phone.toString(), email, location);
@@ -139,3 +161,6 @@ const updateLocalStorage = function () {
 // searchContactByName(contacts, "Brock"); // not found
 
 // searchContactById(contacts, 2);
+
+// Event listener
+inputForm.addEventListener("submit", addContactForm);
