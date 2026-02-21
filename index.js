@@ -1,29 +1,32 @@
-const contacts = [
-  {
-    id: 1,
-    fullName: "Lazuardy Anugrah",
-    phone: 6281292846785,
-    email: "lazuardyanugrah@lazu.com",
-    location: "Bogor, Indonesia",
-    dateCreated: new Date("2025-02-05").toISOString(),
-  },
-  {
-    id: 2,
-    fullName: "Rizky Pratama",
-    phone: 6281376543210,
-    email: "rizky.pratama@gmail.com",
-    location: "Bandung, Indonesia",
-    dateCreated: new Date("2025-02-05").toISOString(),
-  },
-  {
-    id: 3,
-    fullName: "Aditya Hari",
-    phone: 6281122334455,
-    email: "adityahari@gmail.com",
-    location: "Surabaya, Indonesia",
-    dateCreated: new Date("2025-02-05").toISOString(),
-  },
-];
+// let contacts = [
+//   {
+//     id: 1,
+//     fullName: "Lazuardy Anugrah",
+//     phone: 6281292846785,
+//     email: "lazuardyanugrah@lazu.com",
+//     location: "Bogor, Indonesia",
+//     dateCreated: new Date("2025-02-05").toISOString(),
+//   },
+//   {
+//     id: 2,
+//     fullName: "Rizky Pratama",
+//     phone: 6281376543210,
+//     email: "rizky.pratama@gmail.com",
+//     location: "Bandung, Indonesia",
+//     dateCreated: new Date("2025-02-05").toISOString(),
+//   },
+//   {
+//     id: 3,
+//     fullName: "Aditya Hari",
+//     phone: 6281122334455,
+//     email: "adityahari@gmail.com",
+//     location: "Surabaya, Indonesia",
+//     dateCreated: new Date("2025-02-05").toISOString(),
+//   },
+// ];
+
+const localStorageContacts = JSON.parse(localStorage.getItem("contacts"));
+let contacts = localStorageContacts ? localStorageContacts : [];
 
 const printContacts = function (contacts) {
   for (let i = 0; i < contacts.length; i++) {
@@ -47,6 +50,7 @@ const addContact = function (contacts, { fullName, phone, email, location }) {
     dateCreated,
   });
   console.log(contacts);
+  updateLocalStorage();
 };
 
 // Edit contact
@@ -92,6 +96,10 @@ const searchContactById = function (contacts, id) {
   const searchResult = found ? found : "Contact not found";
   console.log(`Search contact by id ${id}:`, searchResult);
   return searchResult;
+};
+
+const updateLocalStorage = function () {
+  localStorage.setItem("contacts", JSON.stringify(contacts));
 };
 
 // printContacts(contacts);
