@@ -1,3 +1,12 @@
+const inputForm = document.querySelector("#input-form");
+const searchForm = document.querySelector("#search-form");
+const searchInput = document.querySelector("#search-input");
+const fullNameInput = document.querySelector("#full-name-input");
+const phoneNumberInput = document.querySelector("#phone-number-input");
+const emailInput = document.querySelector("#email-input");
+const locationInput = document.querySelector("#location-input");
+const list = document.querySelector("#contacts-list");
+
 // let contacts = [
 //   {
 //     id: 1,
