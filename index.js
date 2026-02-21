@@ -65,6 +65,7 @@ const addContactForm = function (e) {
   console.log(contacts);
   inputForm.reset();
   updateLocalStorage();
+  renderContacts();
 };
 
 // add contact function
@@ -81,6 +82,7 @@ const addContact = function (contacts, { fullName, phone, email, location }) {
     dateCreated,
   });
   console.log(contacts);
+  renderContacts();
   updateLocalStorage();
 };
 
@@ -129,6 +131,23 @@ const searchContactById = function (contacts, id) {
   return searchResult;
 };
 
+const renderContacts = function () {
+  list.innerHTML = contacts
+    .map(
+      (contact) => `
+        <div id="contact">
+        <h2>${contact.fullName}</h2>
+        <p>${contact.phone}</p>
+        <p>${contact.email}</p>
+        <p>${contact.location}</p>
+        <button>Edit</button>
+        <button>Delete</button>
+        </div>
+    `,
+    )
+    .join("");
+};
+
 const updateLocalStorage = function () {
   localStorage.setItem("contacts", JSON.stringify(contacts));
 };
@@ -163,4 +182,5 @@ const updateLocalStorage = function () {
 // searchContactById(contacts, 2);
 
 // Event listener
+window.addEventListener("load", renderContacts);
 inputForm.addEventListener("submit", addContactForm);
