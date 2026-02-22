@@ -11,7 +11,7 @@ const list = document.querySelector("#contacts-list");
 //   {
 //     id: 1,
 //     fullName: "Lazuardy Anugrah",
-//     phone: 6281292846785,
+//     phone: "6281292846785",
 //     email: "lazuardyanugrah@lazu.com",
 //     location: "Bogor, Indonesia",
 //     dateCreated: new Date("2025-02-05").toISOString(),
@@ -19,7 +19,7 @@ const list = document.querySelector("#contacts-list");
 //   {
 //     id: 2,
 //     fullName: "Rizky Pratama",
-//     phone: 6281376543210,
+//     phone: "6281376543210",
 //     email: "rizky.pratama@gmail.com",
 //     location: "Bandung, Indonesia",
 //     dateCreated: new Date("2025-02-05").toISOString(),
@@ -27,7 +27,7 @@ const list = document.querySelector("#contacts-list");
 //   {
 //     id: 3,
 //     fullName: "Aditya Hari",
-//     phone: 6281122334455,
+//     phone: "6281122334455",
 //     email: "adityahari@gmail.com",
 //     location: "Surabaya, Indonesia",
 //     dateCreated: new Date("2025-02-05").toISOString(),
