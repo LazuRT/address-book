@@ -36,6 +36,7 @@ const list = document.querySelector("#contacts-list");
 
 const localStorageContacts = JSON.parse(localStorage.getItem("contacts"));
 let contacts = localStorageContacts ? localStorageContacts : [];
+let editId;
 
 const printContacts = function (contacts) {
   for (let i = 0; i < contacts.length; i++) {
@@ -60,7 +61,7 @@ const addContactForm = function (e) {
   contacts.push(contact);
   console.log(contacts);
   inputForm.reset();
-  updateLocalStorage();
+  updateLocalStorage(contacts);
   renderContacts(contacts);
 };
 
@@ -78,23 +79,65 @@ const addContact = function (contacts, { fullName, phone, email, location }) {
     dateCreated,
   });
   console.log(contacts);
-  updateLocalStorage();
+  updateLocalStorage(contacts);
   renderContacts(contacts);
 };
 
 // Edit contact
-const updateContact = function (contacts, id, updatedInfo) {
-  // Search contact index
-  const i = contacts.findIndex((e) => e.id === id);
-  const dateLastEdited = new Date().toISOString();
-  // if contact exist, update contact with updated info
-  if (i !== -1) {
-    contacts[i] = { ...contacts[i], dateLastEdited, ...updatedInfo };
-  } else {
-    console.log("Contact not found");
-  }
+// const updateContact = function (contacts, id, updatedInfo) {
+//   // Search contact index
+//   const i = contacts.findIndex((e) => e.id === id);
+//   const dateLastEdited = new Date().toISOString();
+//   // if contact exist, update contact with updated info
+//   if (i !== -1) {
+//     contacts[i] = { ...contacts[i], dateLastEdited, ...updatedInfo };
+//   } else {
+//     console.log("Contact not found");
+//   }
 
-  console.log(contacts);
+//   console.log(contacts);
+// };
+
+const initiateUpdateContact = function (id) {
+  // change editid
+  editId = id;
+  // Search contact
+  const contact = contacts.find((contact) => contact.id === id);
+  // fill form with contact details
+  fullNameInput.value = contact.fullName;
+  phoneNumberInput.value = contact.phone;
+  emailInput.value = contact.email;
+  locationInput.value = contact.location;
+};
+
+const saveContact = function (e) {
+  e.preventDefault();
+
+  const formData = {
+    fullName: fullNameInput.value,
+    phone: phoneNumberInput.value,
+    email: emailInput.value,
+    location: locationInput.value,
+  };
+
+  if (editId) {
+    const contact = contacts.find((contact) => contact.id === editId);
+    const editedContact = { ...contact, ...formData };
+    contacts = contacts.map((contact) =>
+      contact.id === editId ? { ...contact, ...editedContact } : contact,
+    );
+    editId = null;
+  } else {
+    contacts.push({
+      id: contacts.at(-1).id,
+      dateCreated: new Date().toISOString(),
+      ...formData,
+    });
+    console.log(contacts);
+  }
+  inputForm.reset();
+  renderContacts(contacts);
+  updateLocalStorage(contacts);
 };
 
 const deleteContactById = function (contacts, id) {
@@ -113,7 +156,7 @@ const deleteContactById = function (contacts, id) {
 const deleteContactByIdButton = function (id) {
   contacts = contacts.filter((contact) => contact.id !== id);
   console.log(contacts);
-  updateLocalStorage();
+  updateLocalStorage(contacts);
   renderContacts(contacts);
 };
 
@@ -150,8 +193,8 @@ const renderContacts = function (contactArray) {
         <p>${contact.phone}</p>
         <p>${contact.email}</p>
         <p>${contact.location}</p>
-        <button>Edit</button>
-        <button onClick='deleteContactByIdButton(${contact.id})'>Delete</button>
+        <button onClick='initiateUpdateContact(${contact.id})' class="edit-btn">Edit</button>
+        <button onClick='deleteContactByIdButton(${contact.id})' class="delete-btn">Delete</button>
     `;
     list.appendChild(element);
   });
@@ -177,13 +220,13 @@ async function getRandomContact() {
   const res = await fetch(`https://dummyjson.com/users/${randomId}`);
   const data = await res.json();
 
-  const id = contacts.length + 1;
+  const id = contacts.at(-1).id + 1;
   const dateCreated = new Date().toISOString();
 
   const contact = {
     id,
     fullName: `${data.firstName} ${data.lastName}`,
-    phone: data.phone,
+    phone: data.phone.slice(1).replaceAll("-", "").replace(" ", ""),
     email: data.email,
     location: `${data.address.city}, ${data.address.state}`,
     dateCreated,
@@ -193,15 +236,15 @@ async function getRandomContact() {
 
   contacts.push(contact);
   renderContacts(contacts);
-  updateLocalStorage();
+  updateLocalStorage(contacts);
 }
 
-const updateLocalStorage = function () {
-  localStorage.setItem("contacts", JSON.stringify(contacts));
+const updateLocalStorage = function (contactArr) {
+  localStorage.setItem("contacts", JSON.stringify(contactArr));
 };
 
 // Event listener
 window.addEventListener("load", () => renderContacts(contacts));
-inputForm.addEventListener("submit", addContactForm);
+inputForm.addEventListener("submit", saveContact);
 searchForm.addEventListener("submit", (e) => e.preventDefault());
 searchInput.addEventListener("input", searchContactByName);
