@@ -7,7 +7,7 @@ const emailInput = document.querySelector("#email-input");
 const locationInput = document.querySelector("#location-input");
 const list = document.querySelector("#contacts-list");
 
-// let contacts = [
+// let seedContacts = [
 //   {
 //     id: 1,
 //     fullName: "Lazuardy Anugrah",
@@ -61,7 +61,7 @@ const addContactForm = function (e) {
   console.log(contacts);
   inputForm.reset();
   updateLocalStorage();
-  renderContacts();
+  renderContacts(contacts);
 };
 
 // add contact function
@@ -78,8 +78,8 @@ const addContact = function (contacts, { fullName, phone, email, location }) {
     dateCreated,
   });
   console.log(contacts);
-  renderContacts();
   updateLocalStorage();
+  renderContacts(contacts);
 };
 
 // Edit contact
@@ -110,6 +110,13 @@ const deleteContactById = function (contacts, id) {
   }
 };
 
+const deleteContactByIdButton = function (id) {
+  contacts = contacts.filter((contact) => contact.id !== id);
+  console.log(contacts);
+  updateLocalStorage();
+  renderContacts(contacts);
+};
+
 const searchContactByName = function () {
   const found = contacts.filter((contact) =>
     contact.fullName.toLowerCase().includes(searchInput.value.toLowerCase()),
@@ -118,10 +125,10 @@ const searchContactByName = function () {
   // console.log(`Search contact by name ${name}:`, searchResult);
 
   if (found.length > 0) {
-    console.log("found");
+    // console.log("found");
     renderContacts(found);
   } else if (found.length === 0) {
-    console.log("not found");
+    // console.log("not found");
     list.innerHTML = `<h3>Contact not found</h3>`;
   }
 };
@@ -134,21 +141,60 @@ const searchContactById = function (contacts, id) {
 };
 
 const renderContacts = function (contactArray) {
-  list.innerHTML = contactArray
-    .map(
-      (contact) => `
-        <div id="contact">
+  list.innerHTML = "";
+  contactArray?.forEach((contact) => {
+    const element = document.createElement("div");
+    element.classList.add("contact");
+    element.innerHTML = `
         <h2>${contact.fullName}</h2>
         <p>${contact.phone}</p>
         <p>${contact.email}</p>
         <p>${contact.location}</p>
         <button>Edit</button>
-        <button>Delete</button>
-        </div>
-    `,
-    )
-    .join("");
+        <button onClick='deleteContactByIdButton(${contact.id})'>Delete</button>
+    `;
+    list.appendChild(element);
+  });
+  // list.innerHTML = contactArray
+  //   .map(
+  //     (contact) => `
+  //       <div id="contact">
+  //       <h2>${contact.fullName}</h2>
+  //       <p>${contact.phone}</p>
+  //       <p>${contact.email}</p>
+  //       <p>${contact.location}</p>
+  //       <button>Edit</button>
+  //       <button>Delete</button>
+  //       </div>
+  //   `,
+  //   )
+  //   .join("");
 };
+
+async function getRandomContact() {
+  const randomId = Math.floor(Math.random() * 208) + 1;
+
+  const res = await fetch(`https://dummyjson.com/users/${randomId}`);
+  const data = await res.json();
+
+  const id = contacts.length + 1;
+  const dateCreated = new Date().toISOString();
+
+  const contact = {
+    id,
+    fullName: `${data.firstName} ${data.lastName}`,
+    phone: data.phone,
+    email: data.email,
+    location: `${data.address.city}, ${data.address.state}`,
+    dateCreated,
+  };
+
+  console.log(contact);
+
+  contacts.push(contact);
+  renderContacts(contacts);
+  updateLocalStorage();
+}
 
 const updateLocalStorage = function () {
   localStorage.setItem("contacts", JSON.stringify(contacts));
