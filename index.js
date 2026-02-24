@@ -58,10 +58,6 @@ const addContactForm = function (e) {
     dateCreated: new Date().toISOString(),
   };
   contacts.push(contact);
-  // fullNameInput.value = "";
-  // phoneNumberInput.value = "";
-  // emailInput.value = "";
-  // locationInput.value = "";
   console.log(contacts);
   inputForm.reset();
   updateLocalStorage();
@@ -123,20 +119,7 @@ const searchContactByName = function () {
 
   if (found.length > 0) {
     console.log("found");
-    list.innerHTML = found
-      .map(
-        (contact) => `
-              <div id="contact">
-          <h2>${contact.fullName}</h2>
-          <p>${contact.phone}</p>
-          <p>${contact.email}</p>
-          <p>${contact.location}</p>
-          <button>Edit</button>
-          <button >Delete</button>
-          </div>
-      `,
-      )
-      .join("");
+    renderContacts(found);
   } else if (found.length === 0) {
     console.log("not found");
     list.innerHTML = `<h3>Contact not found</h3>`;
@@ -150,8 +133,8 @@ const searchContactById = function (contacts, id) {
   return searchResult;
 };
 
-const renderContacts = function () {
-  list.innerHTML = contacts
+const renderContacts = function (contactArray) {
+  list.innerHTML = contactArray
     .map(
       (contact) => `
         <div id="contact">
@@ -160,7 +143,7 @@ const renderContacts = function () {
         <p>${contact.email}</p>
         <p>${contact.location}</p>
         <button>Edit</button>
-        <button >Delete</button>
+        <button>Delete</button>
         </div>
     `,
     )
@@ -171,37 +154,8 @@ const updateLocalStorage = function () {
   localStorage.setItem("contacts", JSON.stringify(contacts));
 };
 
-// printContacts(contacts);
-
-// addContact(contacts, {
-//   fullName: "John Doe",
-//   phone: 987898667,
-//   email: "email@email.com",
-//   location: "Los Angeles, California",
-// });
-
-// addContact(contacts, {
-//   fullName: "Ellen Baker",
-//   phone: 90987658,
-//   email: "ellen@email.com",
-//   location: "Chicago, Illinois",
-// });
-
-// updateContact(contacts, 3, {
-//   phone: 123325681,
-//   email: "newemail@gmail.com",
-//   location: "Jakarta, Indonesia",
-// });
-
-// deleteContactById(contacts, 1);
-
-// searchContactByName(contacts, "Adit");
-// searchContactByName(contacts, "Brock"); // not found
-
-// searchContactById(contacts, 2);
-
 // Event listener
-window.addEventListener("load", renderContacts);
+window.addEventListener("load", () => renderContacts(contacts));
 inputForm.addEventListener("submit", addContactForm);
 searchForm.addEventListener("submit", (e) => e.preventDefault());
 searchInput.addEventListener("input", searchContactByName);
