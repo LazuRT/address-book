@@ -129,7 +129,7 @@ const saveContact = function (e) {
     editId = null;
   } else {
     contacts.push({
-      id: contacts.at(-1).id,
+      id: contacts.length > 0 ? contacts.at(-1).id + 1 : 1,
       dateCreated: new Date().toISOString(),
       ...formData,
     });
@@ -220,7 +220,7 @@ async function getRandomContact() {
   const res = await fetch(`https://dummyjson.com/users/${randomId}`);
   const data = await res.json();
 
-  const id = contacts.at(-1).id + 1;
+  const id = contacts.length > 0 ? contacts.at(-1).id + 1 : 1;
   const dateCreated = new Date().toISOString();
 
   const contact = {
