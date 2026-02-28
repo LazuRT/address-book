@@ -192,12 +192,12 @@ const renderContacts = function (contactArray) {
       (contact) => `
                <div
                 id="contact"
-                class="p-6 border-b border-gray-100  transition duration-300"
+                class="p-6 border-b border-gray-100"
               >
                 <h3 class="text-xl font-semibold text-gray-800">
                   ${contact.fullName}
                 </h3>
-                <div class="mt-3 space-y-1 text-sm text-gray-600">
+                <div class="mt-3 space-y-1 text-sm text-gray-600 break-all">
                   <p><i class="ri-phone-line"></i> ${contact.phone}</p>
                   <p><i class="ri-mail-fill"></i> ${contact.email}</p>
                   <p><i class="ri-map-pin-2-fill"></i> ${contact.location}</p>
