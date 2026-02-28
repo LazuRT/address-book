@@ -34,8 +34,8 @@ const list = document.querySelector("#contacts-list");
 //   },
 // ];
 
-const localStorageContacts = JSON.parse(localStorage.getItem("contacts"));
-let contacts = localStorageContacts ? localStorageContacts : [];
+// const localStorageContacts = JSON.parse(localStorage.getItem("contacts"));
+let contacts = loadContact();
 let editId;
 
 const printContacts = function (contacts) {
@@ -246,10 +246,6 @@ async function getRandomContact() {
   renderContacts(contacts);
   updateLocalStorage(contacts);
 }
-
-const updateLocalStorage = function (contactArr) {
-  localStorage.setItem("contacts", JSON.stringify(contactArr));
-};
 
 // Event listener
 window.addEventListener("load", () => renderContacts(contacts));
