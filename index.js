@@ -34,69 +34,8 @@ const list = document.querySelector("#contacts-list");
 //   },
 // ];
 
-// const localStorageContacts = JSON.parse(localStorage.getItem("contacts"));
 let contacts = loadContact();
 let editId;
-
-const printContacts = function (contacts) {
-  for (let i = 0; i < contacts.length; i++) {
-    console.log(
-      `${contacts[i].fullName}, ${contacts[i].phone}, ${contacts[i].email}, ${contacts[i].location}`,
-    );
-  }
-};
-
-// Add contact from form
-const addContactForm = function (e) {
-  e.preventDefault();
-
-  const contact = {
-    id: contacts.length + 1,
-    fullName: fullNameInput.value,
-    phone: phoneNumberInput.value,
-    email: emailInput.value,
-    location: locationInput.value,
-    dateCreated: new Date().toISOString(),
-  };
-  contacts.push(contact);
-  console.log(contacts);
-  inputForm.reset();
-  updateLocalStorage(contacts);
-  renderContacts(contacts);
-};
-
-// add contact function
-const addContact = function (contacts, { fullName, phone, email, location }) {
-  console.log(fullName, phone.toString(), email, location);
-  const id = contacts.length + 1;
-  const dateCreated = new Date().toISOString();
-  contacts.push({
-    id,
-    fullName,
-    phone: phone.toString(),
-    email,
-    location,
-    dateCreated,
-  });
-  console.log(contacts);
-  updateLocalStorage(contacts);
-  renderContacts(contacts);
-};
-
-// Edit contact
-// const updateContact = function (contacts, id, updatedInfo) {
-//   // Search contact index
-//   const i = contacts.findIndex((e) => e.id === id);
-//   const dateLastEdited = new Date().toISOString();
-//   // if contact exist, update contact with updated info
-//   if (i !== -1) {
-//     contacts[i] = { ...contacts[i], dateLastEdited, ...updatedInfo };
-//   } else {
-//     console.log("Contact not found");
-//   }
-
-//   console.log(contacts);
-// };
 
 const initiateUpdateContact = function (id) {
   // change editid
@@ -140,19 +79,6 @@ const saveContact = function (e) {
   updateLocalStorage(contacts);
 };
 
-const deleteContactById = function (contacts, id) {
-  // Search contact index
-  const i = contacts.findIndex((e) => e.id === id);
-
-  // remove the contact
-  if (i !== -1) {
-    contacts.splice(i, 1);
-    console.log(contacts);
-  } else {
-    console.log("Contact not found");
-  }
-};
-
 const deleteContactByIdButton = function (id) {
   contacts = contacts.filter((contact) => contact.id !== id);
   console.log(contacts);
@@ -164,25 +90,14 @@ const searchContactByName = function () {
   const found = contacts.filter((contact) =>
     contact.fullName.toLowerCase().includes(searchInput.value.toLowerCase()),
   );
-  const searchResult = found.length > 0 ? found : "Contact not found";
-  // console.log(`Search contact by name ${name}:`, searchResult);
 
   if (found.length > 0) {
-    // console.log("found");
     renderContacts(found);
   } else if (found.length === 0) {
-    // console.log("not found");
     list.innerHTML = `
     <div class="p-4 "><h2 class="text-gray-600 text-xl">Contact not found</h2></div>
   `;
   }
-};
-
-const searchContactById = function (contacts, id) {
-  const found = contacts.find((contact) => contact.id === id);
-  const searchResult = found ? found : "Contact not found";
-  console.log(`Search contact by id ${id}:`, searchResult);
-  return searchResult;
 };
 
 const renderContacts = function (contactArray) {
