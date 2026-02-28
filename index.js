@@ -172,7 +172,9 @@ const searchContactByName = function () {
     renderContacts(found);
   } else if (found.length === 0) {
     // console.log("not found");
-    list.innerHTML = `<h3>Contact not found</h3>`;
+    list.innerHTML = `
+    <div class="p-4 "><h2 class="text-gray-600 text-xl">Contact not found</h2></div>
+  `;
   }
 };
 
@@ -185,33 +187,39 @@ const searchContactById = function (contacts, id) {
 
 const renderContacts = function (contactArray) {
   list.innerHTML = "";
-  contactArray?.forEach((contact) => {
-    const element = document.createElement("div");
-    element.classList.add("contact");
-    element.innerHTML = `
-        <h2>${contact.fullName}</h2>
-        <p>${contact.phone}</p>
-        <p>${contact.email}</p>
-        <p>${contact.location}</p>
-        <button onClick='initiateUpdateContact(${contact.id})' class="edit-btn">Edit</button>
-        <button onClick='deleteContactByIdButton(${contact.id})' class="delete-btn">Delete</button>
-    `;
-    list.appendChild(element);
-  });
-  // list.innerHTML = contactArray
-  //   .map(
-  //     (contact) => `
-  //       <div id="contact">
-  //       <h2>${contact.fullName}</h2>
-  //       <p>${contact.phone}</p>
-  //       <p>${contact.email}</p>
-  //       <p>${contact.location}</p>
-  //       <button>Edit</button>
-  //       <button>Delete</button>
-  //       </div>
-  //   `,
-  //   )
-  //   .join("");
+  list.innerHTML = contactArray
+    .map(
+      (contact) => `
+               <div
+                id="contact"
+                class="p-6 border-b border-gray-100  transition duration-300"
+              >
+                <h3 class="text-xl font-semibold text-gray-800">
+                  ${contact.fullName}
+                </h3>
+                <div class="mt-3 space-y-1 text-sm text-gray-600">
+                  <p><i class="ri-phone-line"></i> ${contact.phone}</p>
+                  <p><i class="ri-mail-fill"></i> ${contact.email}</p>
+                  <p><i class="ri-map-pin-2-fill"></i> ${contact.location}</p>
+                </div>
+                <div class="text-sm mt-2">
+                  <button
+                    class="px-1 py-1 rounded text-green-700 border border-green-700 hover:bg-green-200 hover:cursor-pointer transition"
+                    onClick='initiateUpdateContact(${contact.id})'
+                  >
+                    <i class="ri-edit-box-line"></i> Update
+                  </button>
+                  <button
+                    class="px-1 py-1 rounded text-red-600 border border-red-600 hover:bg-red-200 hover:cursor-pointer transition"
+                    onClick='deleteContactByIdButton(${contact.id})'
+                  >
+                    <i class="ri-delete-bin-6-line"></i> Delete
+                  </button>
+                </div>
+              </div>
+      `,
+    )
+    .join("");
 };
 
 async function getRandomContact() {
