@@ -52,6 +52,7 @@ const initiateUpdateContact = function (id) {
 const saveContact = function (e) {
   e.preventDefault();
 
+  // TODO: try out formData.entries(), to eliminate the needs to declare each form items at the top of file
   const formData = {
     fullName: fullNameInput.value,
     phone: phoneNumberInput.value,
@@ -60,6 +61,7 @@ const saveContact = function (e) {
   };
 
   if (editId) {
+    // TODO: try out findIndex and mutate the contacts in place instead of wastefully using .map()
     const contact = contacts.find((contact) => contact.id === editId);
     const editedContact = { ...contact, ...formData };
     contacts = contacts.map((contact) =>
