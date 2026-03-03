@@ -63,10 +63,11 @@ const saveContact = function (e) {
   if (editId) {
     // TODO: try out findIndex and mutate the contacts in place instead of wastefully using .map()
     const contact = contacts.find((contact) => contact.id === editId);
-    const editedContact = { ...contact, ...formData };
-    contacts = contacts.map((contact) =>
-      contact.id === editId ? { ...contact, ...editedContact } : contact,
-    );
+    const contactIndex = contacts.findIndex((contact) => contact.id === editId);
+    contacts[contactIndex] = { ...contact, ...formData };
+    // contacts = contacts.map((contact) =>
+    //   contact.id === editId ? { ...contact, ...editedContact } : contact,
+    // );
     editId = null;
   } else {
     contacts.push({
