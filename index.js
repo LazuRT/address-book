@@ -1,10 +1,6 @@
 const inputForm = document.querySelector("#input-form");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
-const fullNameInput = document.querySelector("#full-name-input");
-const phoneNumberInput = document.querySelector("#phone-number-input");
-const emailInput = document.querySelector("#email-input");
-const locationInput = document.querySelector("#location-input");
 const list = document.querySelector("#contacts-list");
 
 // let seedContacts = [
@@ -43,39 +39,37 @@ const initiateUpdateContact = function (id) {
   // Search contact
   const contact = contacts.find((contact) => contact.id === id);
   // fill form with contact details
-  fullNameInput.value = contact.fullName;
-  phoneNumberInput.value = contact.phone;
-  emailInput.value = contact.email;
-  locationInput.value = contact.location;
+  inputForm.fullName.value = contact.fullName;
+  inputForm.phone.value = contact.phone;
+  inputForm.email.value = contact.email;
+  inputForm.location.value = contact.location;
 };
 
 const saveContact = function (e) {
   e.preventDefault();
 
   // TODO: try out formData.entries(), to eliminate the needs to declare each form items at the top of file
-  const formData = {
-    fullName: fullNameInput.value,
-    phone: phoneNumberInput.value,
-    email: emailInput.value,
-    location: locationInput.value,
-  };
+  const formData = new FormData(inputForm);
+  const data = Object.fromEntries(formData.entries());
+
+  // console.log(data);
 
   if (editId) {
     // TODO: try out findIndex and mutate the contacts in place instead of wastefully using .map()
-    const contact = contacts.find((contact) => contact.id === editId);
     const contactIndex = contacts.findIndex((contact) => contact.id === editId);
-    contacts[contactIndex] = { ...contact, ...formData };
+    contacts[contactIndex] = { ...contacts[contactIndex], ...data };
     // contacts = contacts.map((contact) =>
-    //   contact.id === editId ? { ...contact, ...editedContact } : contact,
+    //   contact.id === editId ? { ...contact, ...data } : contact,
     // );
+    // console.log(contacts);
     editId = null;
   } else {
     contacts.push({
       id: contacts.length > 0 ? contacts.at(-1).id + 1 : 1,
       dateCreated: new Date().toISOString(),
-      ...formData,
+      ...data,
     });
-    console.log(contacts);
+    // console.log(contacts);
   }
   inputForm.reset();
   renderContacts(contacts);
@@ -158,7 +152,7 @@ async function getRandomContact() {
     dateCreated,
   };
 
-  console.log(contact);
+  // console.log(contact);
 
   contacts.push(contact);
   renderContacts(contacts);
