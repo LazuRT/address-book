@@ -1,7 +1,7 @@
 const inputForm = document.querySelector("#input-form");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
-const list = document.querySelector("#contacts-list");
+const contactList = document.querySelector("#contacts-list");
 
 // let seedContacts = [
 //   {
@@ -76,7 +76,7 @@ const saveContact = function (e) {
   updateLocalStorage(contacts);
 };
 
-const deleteContactByIdButton = function (id) {
+const deleteContact = function (id) {
   contacts = contacts.filter((contact) => contact.id !== id);
   console.log(contacts);
   updateLocalStorage(contacts);
@@ -91,20 +91,20 @@ const searchContactByName = function () {
   if (found.length > 0) {
     renderContacts(found);
   } else if (found.length === 0) {
-    list.innerHTML = `
+    contactList.innerHTML = `
     <div class="p-4 "><h2 class="text-gray-600 text-xl">Contact not found</h2></div>
   `;
   }
 };
 
 const renderContacts = function (contactArray) {
-  list.innerHTML = "";
-  list.innerHTML = contactArray
+  contactList.innerHTML = "";
+  contactList.innerHTML = contactArray
     .map(
       (contact) => `
                <div
-                id="contact"
-                class="p-6 border-b border-gray-100"
+                class=" contact-item p-6 border-b border-gray-100"
+                data-id="${contact.id}"
               >
                 <h3 class="text-xl font-semibold text-gray-800">
                   ${contact.fullName}
@@ -116,14 +116,12 @@ const renderContacts = function (contactArray) {
                 </div>
                 <div class="text-sm mt-2">
                   <button
-                    class="px-1 py-1 rounded text-green-700 border border-green-700 hover:bg-green-200 hover:cursor-pointer transition"
-                    onClick='initiateUpdateContact(${contact.id})'
+                    class="update-btn px-1 py-1 rounded text-green-700 border border-green-700 hover:bg-green-200 hover:cursor-pointer transition"
                   >
                     <i class="ri-edit-box-line"></i> Update
                   </button>
                   <button
-                    class="px-1 py-1 rounded text-red-600 border border-red-600 hover:bg-red-200 hover:cursor-pointer transition"
-                    onClick='deleteContactByIdButton(${contact.id})'
+                    class="delete-btn px-1 py-1 rounded text-red-600 border border-red-600 hover:bg-red-200 hover:cursor-pointer transition"
                   >
                     <i class="ri-delete-bin-6-line"></i> Delete
                   </button>
@@ -164,3 +162,20 @@ window.addEventListener("load", () => renderContacts(contacts));
 inputForm.addEventListener("submit", saveContact);
 searchForm.addEventListener("submit", (e) => e.preventDefault());
 searchInput.addEventListener("input", searchContactByName);
+contactList.addEventListener("click", function (e) {
+  const deleteBtn = e.target.closest(".delete-btn");
+  const updateBtn = e.target.closest(".update-btn");
+
+  //Stop if target is not update or delete button
+  if (!deleteBtn && !updateBtn) return;
+
+  // find the parent that has data-id
+  const contactItem = e.target.closest("[data-id]");
+  const id = Number(contactItem.dataset.id);
+
+  // console.log(contactItem, id);
+
+  // handle function based on button clicked
+  if (updateBtn) initiateUpdateContact(id);
+  if (deleteBtn) deleteContact(id);
+});
